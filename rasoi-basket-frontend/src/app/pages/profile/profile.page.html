@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <img *ngIf="currentUser?.profileImage" [src]="currentUser?.profileImage" alt="Profile Picture">
+      <ion-icon *ngIf="!currentUser?.profileImage" name="person-outline"></ion-icon>
+    </div>
+    <h2>{{ currentUser?.name || 'User' }}</h2>
+    <p class="user-role">{{ currentUser?.role | titlecase }}</p>
+  </div>
+
+  <ion-list class="profile-info">
+    <ion-item>
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
+      <ion-label>
+        <p>Email</p>
+        <h3>{{ currentUser?.email }}</h3>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="currentUser?.phone">
+      <ion-icon name="call-outline" slot="start"></ion-icon>
+      <ion-label>
+        <p>Phone</p>
+        <h3>{{ currentUser?.phone }}</h3>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="currentUser?.dateJoined">
+      <ion-icon name="time-outline" slot="start"></ion-icon>
+      <ion-label>
+        <p>Member Since</p>
+        <h3>{{ currentUser?.dateJoined | date }}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header>
+    <ion-label>Account Settings</ion-label>
+  </ion-list-header>
+
+  <ion-list class="settings-list">
+    <ion-item button>
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-label>Edit Profile</ion-label>
+      <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+    
+    <ion-item>
+      <ion-icon [name]="isDarkMode ? 'moon-outline' : 'sunny-outline'" slot="start"></ion-icon>
+      <ion-label>Dark Mode</ion-label>
+      <ion-toggle [(ngModel)]="isDarkMode" (ionChange)="toggleDarkMode()"></ion-toggle>
+    </ion-item>
+    
+    <ion-item button>
+      <ion-icon name="language-outline" slot="start"></ion-icon>
+      <ion-label>Language</ion-label>
+      <ion-note slot="end">English</ion-note>
+      <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+    
+    <ion-item button>
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-label>Change Password</ion-label>
+      <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header>
+    <ion-label>Support</ion-label>
+  </ion-list-header>
+
+  <ion-list class="support-list">
+    <ion-item button>
+      <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+      <ion-label>Help & Support</ion-label>
+      <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+    
+    <ion-item button>
+      <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+      <ion-label>About Us</ion-label>
+      <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <div class="logout-button">
+    <ion-button expand="block" color="danger" (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Logout
+    </ion-button>
+  </div>
+</ion-content>

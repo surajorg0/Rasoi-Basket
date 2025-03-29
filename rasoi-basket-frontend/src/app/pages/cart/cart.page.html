@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Your Cart</ion-title>
+    <ion-buttons slot="end" *ngIf="cartItems.length > 0">
+      <ion-button color="danger" (click)="clearCart()">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading your cart...</p>
+  </div>
+
+  <div class="empty-cart" *ngIf="!isLoading && cartItems.length === 0">
+    <ion-icon name="cart-outline"></ion-icon>
+    <h3>Your cart is empty</h3>
+    <p>Add items to your cart to place an order</p>
+    <ion-button routerLink="/tabs/home" expand="block" fill="outline">
+      Browse Restaurants
+    </ion-button>
+  </div>
+
+  <div class="cart-container" *ngIf="!isLoading && cartItems.length > 0">
+    <div class="cart-items">
+      <ion-list>
+        <ion-item-sliding *ngFor="let item of cartItems; let i = index">
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img [src]="item.image" [alt]="item.name">
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.name }}</h2>
+              <p>{{ item.restaurant }}</p>
+              <ion-text color="primary">₹{{ item.price }}</ion-text>
+            </ion-label>
+            <div class="item-quantity">
+              <ion-button fill="clear" size="small" (click)="decreaseQuantity(item)">
+                <ion-icon name="remove-outline"></ion-icon>
+              </ion-button>
+              <span>{{ item.quantity }}</span>
+              <ion-button fill="clear" size="small" (click)="increaseQuantity(item)">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="removeItem(i)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </div>
+
+    <div class="price-details">
+      <h3>Price Details</h3>
+      <div class="price-row">
+        <span>Item Total</span>
+        <span>₹{{ getSubtotal() }}</span>
+      </div>
+      <div class="price-row">
+        <span>Delivery Fee</span>
+        <span>₹{{ getDeliveryFee() }}</span>
+      </div>
+      <div class="price-row">
+        <span>Taxes</span>
+        <span>₹{{ getTaxes() }}</span>
+      </div>
+      <div class="price-row total">
+        <span>Total Amount</span>
+        <span>₹{{ getTotal() }}</span>
+      </div>
+    </div>
+
+    <div class="checkout-button">
+      <ion-button expand="block">
+        Proceed to Checkout
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

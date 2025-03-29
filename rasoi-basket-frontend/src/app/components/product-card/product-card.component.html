@@ -1,0 +1,27 @@
+<ion-card>
+  <img [src]="product.image" alt="{{ product.name }}" *ngIf="product.image" />
+  <ion-img src="assets/images/placeholder.jpg" *ngIf="!product.image"></ion-img>
+  
+  <ion-card-header>
+    <ion-card-title>{{ product.name }}</ion-card-title>
+    <ion-card-subtitle *ngIf="product.discountPercentage > 0" color="danger">
+      {{ product.discountPercentage }}% OFF
+    </ion-card-subtitle>
+  </ion-card-header>
+  
+  <ion-card-content>
+    <div class="price-container">
+      <div class="price" [class.discounted]="product.discountPercentage > 0">
+        ₹{{ product.price }}/{{ product.unit }}
+      </div>
+      <div class="final-price" *ngIf="product.discountPercentage > 0">
+        ₹{{ product.finalPrice }}/{{ product.unit }}
+      </div>
+    </div>
+    
+    <ion-button expand="block" (click)="addToCart()" [disabled]="!product.isAvailable">
+      <ion-icon name="cart-outline" slot="start"></ion-icon>
+      Add to Cart
+    </ion-button>
+  </ion-card-content>
+</ion-card>

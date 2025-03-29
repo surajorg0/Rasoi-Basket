@@ -1,0 +1,24 @@
+{
+  "name": "rasoi-basket",
+  "version": "1.0.0",
+  "description": "A food delivery application",
+  "main": "index.js",
+  "scripts": {
+    "start:frontend": "cd rasoi-basket-frontend && npm start",
+    "start:backend": "cd rasoi-basket-backend && npm start",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "install:all": "npm install && cd rasoi-basket-frontend && npm install && cd ../rasoi-basket-backend && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "food",
+    "delivery",
+    "rasoi",
+    "basket"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+} 

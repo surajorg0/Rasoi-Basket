@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Rasoi Basket
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="welcome-container">
+    <h1>Welcome to Rasoi Basket</h1>
+    <p>Your favorite food delivery platform</p>
+    
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Role-Based Authentication Demo</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>This demo shows different user roles:</p>
+        <ul>
+          <li><strong>Admin:</strong> Manage users, approve sellers/delivery partners</li>
+          <li><strong>Seller:</strong> Manage restaurant, menu items, orders</li>
+          <li><strong>Delivery Partner:</strong> Manage deliveries, update status</li>
+          <li><strong>Customer:</strong> Browse, order food, track deliveries</li>
+        </ul>
+        
+        <p *ngIf="!isLoggedIn">
+          <ion-button routerLink="/login" expand="block" color="primary">Log In</ion-button>
+          <ion-button routerLink="/register" expand="block" color="secondary">Create Account</ion-button>
+        </p>
+        
+        <p *ngIf="isLoggedIn">
+          You are logged in. Use the tabs to navigate.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content> 

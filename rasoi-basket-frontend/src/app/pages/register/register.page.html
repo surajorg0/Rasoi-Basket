@@ -1,0 +1,164 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="register-container">
+  <div class="logo-container">
+    <h1>Rasoi Basket</h1>
+    <p>Create your account to enjoy delicious food</p>
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+    <ion-item>
+      <ion-label position="floating">Full Name</ion-label>
+      <ion-input formControlName="name" type="text"></ion-input>
+    </ion-item>
+    <div *ngIf="isSubmitted && form['name'].errors" class="error-message">
+      <span *ngIf="form['name'].errors['required']">Name is required</span>
+      <span *ngIf="form['name'].errors['minlength']">Name must be at least 3 characters</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input formControlName="email" type="email"></ion-input>
+    </ion-item>
+    <div *ngIf="isSubmitted && form['email'].errors" class="error-message">
+      <span *ngIf="form['email'].errors['required']">Email is required</span>
+      <span *ngIf="form['email'].errors['email']">Please enter a valid email address</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Phone Number</ion-label>
+      <ion-input formControlName="phone" type="tel"></ion-input>
+    </ion-item>
+    <div *ngIf="isSubmitted && form['phone'].errors" class="error-message">
+      <span *ngIf="form['phone'].errors['required']">Phone number is required</span>
+      <span *ngIf="form['phone'].errors['pattern']">Please enter a valid phone number</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
+    </ion-item>
+    <div *ngIf="isSubmitted && form['password'].errors" class="error-message">
+      <span *ngIf="form['password'].errors['required']">Password is required</span>
+      <span *ngIf="form['password'].errors['minlength']">Password must be at least 5 characters</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Confirm Password</ion-label>
+      <ion-input formControlName="confirmPassword" type="password"></ion-input>
+    </ion-item>
+    <div *ngIf="isSubmitted && form['confirmPassword'].errors" class="error-message">
+      <span *ngIf="form['confirmPassword'].errors['required']">Confirm password is required</span>
+      <span *ngIf="form['confirmPassword'].errors['mismatch']">Passwords do not match</span>
+    </div>
+
+    <ion-item>
+      <ion-label>Register as</ion-label>
+      <ion-select formControlName="role">
+        <ion-select-option *ngFor="let role of availableRoles" [value]="role.value">{{ role.label }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Additional fields for sellers -->
+    <div *ngIf="role === 'seller'" class="seller-fields" formGroupName="sellerInfo">
+      <h3>Restaurant/Store Information</h3>
+      
+      <div class="info-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>Seller accounts require admin approval before they can be used.</span>
+      </div>
+      
+      <ion-item>
+        <ion-label position="floating">Restaurant/Store Name</ion-label>
+        <ion-input formControlName="storeName" type="text"></ion-input>
+      </ion-item>
+      <div *ngIf="isSubmitted && sellerInfo.get('storeName')?.errors?.['required']" class="error-message">
+        Store name is required
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Restaurant/Store Address</ion-label>
+        <ion-textarea formControlName="storeAddress" rows="3"></ion-textarea>
+      </ion-item>
+      <div *ngIf="isSubmitted && sellerInfo.get('storeAddress')?.errors?.['required']" class="error-message">
+        Store address is required
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Business Registration Number</ion-label>
+        <ion-input formControlName="businessRegNumber" type="text"></ion-input>
+      </ion-item>
+      <div *ngIf="isSubmitted && sellerInfo.get('businessRegNumber')?.errors?.['required']" class="error-message">
+        Business registration number is required
+      </div>
+    </div>
+
+    <!-- Additional fields for delivery partners -->
+    <div *ngIf="role === 'delivery'" class="seller-fields" formGroupName="deliveryInfo">
+      <h3>Delivery Partner Information</h3>
+      
+      <div class="info-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>Delivery partner accounts require admin approval before they can be used.</span>
+      </div>
+      
+      <ion-item>
+        <ion-label position="floating">Vehicle Type</ion-label>
+        <ion-select formControlName="vehicleType">
+          <ion-select-option value="Bicycle">Bicycle</ion-select-option>
+          <ion-select-option value="Motorcycle">Motorcycle</ion-select-option>
+          <ion-select-option value="Scooter">Scooter</ion-select-option>
+          <ion-select-option value="Car">Car</ion-select-option>
+          <ion-select-option value="Other">Other</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div *ngIf="isSubmitted && deliveryInfo.get('vehicleType')?.errors?.['required']" class="error-message">
+        Vehicle type is required
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">License Number</ion-label>
+        <ion-input formControlName="licenseNumber" type="text"></ion-input>
+      </ion-item>
+      <div *ngIf="isSubmitted && deliveryInfo.get('licenseNumber')?.errors?.['required']" class="error-message">
+        License number is required
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Service Areas (comma-separated)</ion-label>
+        <ion-textarea formControlName="area" rows="3" placeholder="e.g. South Mumbai, Andheri, Bandra"></ion-textarea>
+      </ion-item>
+      <div *ngIf="isSubmitted && deliveryInfo.get('area')?.errors?.['required']" class="error-message">
+        Service area(s) are required
+      </div>
+    </div>
+
+    <ion-item lines="none">
+      <ion-checkbox slot="start" formControlName="termsAccepted"></ion-checkbox>
+      <ion-label>I accept the Terms and Conditions</ion-label>
+    </ion-item>
+    <div *ngIf="isSubmitted && form['termsAccepted'].errors?.['required']" class="error-message">
+      You must accept the terms and conditions
+    </div>
+
+    <div *ngIf="registerError" class="form-error">
+      {{ registerError }}
+    </div>
+
+    <ion-button expand="block" type="submit" [disabled]="isLoading">
+      <ion-spinner name="dots" *ngIf="isLoading"></ion-spinner>
+      <span *ngIf="!isLoading">Register</span>
+    </ion-button>
+  </form>
+
+  <div class="login-options">
+    <p>Already have an account? <a routerLink="/login">Login</a></p>
+  </div>
+</ion-content>

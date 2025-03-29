@@ -1,0 +1,140 @@
+.login-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 32px;
+  
+  h1 {
+    font-size: 2.2rem;
+    color: var(--ion-color-primary);
+    margin-bottom: 8px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+  }
+}
+
+form {
+  margin-bottom: 24px;
+  
+  ion-item {
+    --padding-start: 0;
+    margin-bottom: 12px;
+    --border-color: var(--ion-color-light-shade);
+    --highlight-color-focused: var(--ion-color-primary);
+  }
+  
+  ion-button {
+    margin-top: 16px;
+    --border-radius: 8px;
+    height: 48px;
+  }
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 0.8rem;
+  margin: -8px 0 16px 0;
+  padding-left: 8px;
+}
+
+.form-error {
+  color: var(--ion-color-danger);
+  background-color: rgba(var(--ion-color-danger-rgb), 0.1);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 16px 0;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.login-options {
+  text-align: center;
+  margin-top: 16px;
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    
+    a {
+      color: var(--ion-color-primary);
+      font-weight: 500;
+    }
+  }
+}
+
+.forgot-password {
+  text-align: right;
+  margin: 8px 0 16px;
+  
+  a {
+    color: var(--ion-color-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+}
+
+.demo-accounts {
+  margin-top: 32px;
+  border-top: 1px solid var(--ion-color-light-shade);
+  padding-top: 24px;
+  
+  h3 {
+    color: var(--ion-color-dark);
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  
+  p {
+    text-align: center;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+  }
+  
+  .account-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    
+    ion-card {
+      margin: 0;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-4px);
+      }
+      
+      ion-card-header {
+        padding-bottom: 8px;
+      }
+      
+      ion-card-subtitle {
+        text-transform: uppercase;
+        font-weight: bold;
+        color: var(--ion-color-primary);
+      }
+      
+      ion-card-title {
+        font-size: 1rem;
+      }
+      
+      ion-card-content {
+        font-size: 0.8rem;
+        
+        p {
+          text-align: left;
+          margin: 4px 0;
+        }
+      }
+    }
+  }
+}

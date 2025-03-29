@@ -1,0 +1,69 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <!-- Side menu -->
+    <ion-menu contentId="main-content" *ngIf="isLoggedIn">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Rasoi Basket</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/home" routerDirection="root" routerLinkActive="selected">
+              <ion-icon name="home-outline" slot="start"></ion-icon>
+              <ion-label>Home</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/profile" routerDirection="root" routerLinkActive="selected">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-label>My Profile</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/orders" routerDirection="root" routerLinkActive="selected">
+              <ion-icon name="receipt-outline" slot="start"></ion-icon>
+              <ion-label>My Orders</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false" *ngIf="isAdmin">
+            <ion-item routerLink="/admin-dashboard" routerDirection="root" routerLinkActive="selected">
+              <ion-icon name="analytics-outline" slot="start"></ion-icon>
+              <ion-label>Admin Dashboard</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false" *ngIf="isSeller">
+            <ion-item routerLink="/seller-dashboard" routerDirection="root" routerLinkActive="selected">
+              <ion-icon name="storefront-outline" slot="start"></ion-icon>
+              <ion-label>Seller Dashboard</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false" *ngIf="isDelivery">
+            <ion-item routerLink="/delivery-dashboard" routerDirection="root" routerLinkActive="selected">
+              <ion-icon name="bicycle-outline" slot="start"></ion-icon>
+              <ion-label>Delivery Dashboard</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
+            <ion-item (click)="logout()" button>
+              <ion-icon name="log-out-outline" slot="start"></ion-icon>
+              <ion-label>Logout</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    
+    <!-- Main content -->
+    <div class="ion-page" id="main-content">
+      <ion-router-outlet></ion-router-outlet>
+    </div>
+  </ion-split-pane>
+</ion-app> 

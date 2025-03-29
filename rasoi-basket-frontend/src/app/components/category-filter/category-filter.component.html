@@ -1,0 +1,14 @@
+<ion-segment [value]="selectedCategory" (ionChange)="categoryChanged($event)">
+  <ion-segment-button value="all">
+    <ion-label>All</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="vegetables">
+    <ion-label>Vegetables</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="fruits">
+    <ion-label>Fruits</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="groceries">
+    <ion-label>Groceries</ion-label>
+  </ion-segment-button>
+</ion-segment>

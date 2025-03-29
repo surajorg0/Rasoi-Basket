@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <div class="logo-container">
+      <h1>Rasoi Basket</h1>
+      <p>Login to your account to continue</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input formControlName="email" type="email"></ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="isSubmitted && formControls['email'].errors">
+        <span *ngIf="formControls['email'].errors['required']">Email is required</span>
+        <span *ngIf="formControls['email'].errors['email']">Please enter a valid email address</span>
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input formControlName="password" type="password"></ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="isSubmitted && formControls['password'].errors">
+        <span *ngIf="formControls['password'].errors['required']">Password is required</span>
+        <span *ngIf="formControls['password'].errors['minlength']">Password must be at least 6 characters</span>
+      </div>
+
+      <div class="forgot-password">
+        <a (click)="forgotPassword()">Forgot Password?</a>
+      </div>
+
+      <div class="form-error" *ngIf="loginError">{{ loginError }}</div>
+
+      <ion-button expand="block" type="submit" [disabled]="isLoading">
+        <ion-spinner name="dots" *ngIf="isLoading"></ion-spinner>
+        <span *ngIf="!isLoading">Login</span>
+      </ion-button>
+
+      <div class="login-options">
+        <p>Don't have an account? <a routerLink="/register">Register</a></p>
+      </div>
+    </form>
+
+    <div class="demo-accounts">
+      <h3>Demo Accounts</h3>
+      <p>Click on any account to auto-fill credentials:</p>
+      
+      <div class="account-grid">
+        <ion-card *ngFor="let account of demoAccounts" (click)="fillDemoCredentials(account)" button>
+          <ion-card-header>
+            <ion-card-subtitle>{{ account.role | titlecase }}</ion-card-subtitle>
+            <ion-card-title>{{ account.description }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Email:</strong> {{ account.email }}</p>
+            <p><strong>Password:</strong> {{ account.password }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

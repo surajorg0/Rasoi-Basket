@@ -1,0 +1,54 @@
+<app-header [title]="'Rasoi Basket'"></app-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="location-bar">
+    <ion-item lines="none">
+      <ion-icon name="location-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Deliver to:</h3>
+        <p>{{ currentLocation || 'Select your location' }}</p>
+      </ion-label>
+      <ion-button fill="clear" (click)="openLocationModal()">
+        <ion-icon name="locate-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </div>
+
+  <ion-searchbar placeholder="Search for vegetables, fruits, groceries..." [(ngModel)]="searchTerm" (ionChange)="searchProducts()"></ion-searchbar>
+
+  <app-category-filter [selectedCategory]="selectedCategory" (categoryChange)="onCategoryChange($event)"></app-category-filter>
+
+  <div class="container">
+    <!-- Loading indicator -->
+    <div class="loading-container" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading products...</p>
+    </div>
+
+    <!-- Error message -->
+    <div class="error-container" *ngIf="error">
+      <ion-icon name="alert-circle-outline" color="danger"></ion-icon>
+      <p>{{ error }}</p>
+      <ion-button (click)="loadProducts()">Try Again</ion-button>
+    </div>
+
+    <!-- No products message -->
+    <div class="no-products-container" *ngIf="!isLoading && !error && filteredProducts.length === 0">
+      <ion-icon name="basket-outline"></ion-icon>
+      <p>No products found in this category.</p>
+    </div>
+
+    <!-- Products grid -->
+    <ion-grid *ngIf="!isLoading && !error && filteredProducts.length > 0">
+      <ion-row>
+        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let product of filteredProducts">
+          <app-product-card [product]="product" (click)="viewProductDetails(product._id)"></app-product-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

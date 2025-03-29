@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Admin Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="refreshData()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="admin-header">
+    <h1>Welcome, {{ currentUser?.name || 'Admin' }}</h1>
+    <p>Manage your food delivery platform from here</p>
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner name="circular"></ion-spinner>
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <!-- Error message -->
+  <div class="error-container" *ngIf="loadingError">
+    <p>{{ loadingError }}</p>
+    <ion-button (click)="loadDashboardData()">Retry</ion-button>
+  </div>
+
+  <ion-grid *ngIf="!isLoading && !loadingError">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card class="dashboard-card">
+          <ion-card-header>
+            <ion-icon name="people-outline"></ion-icon>
+            <ion-card-title>Users</ion-card-title>
+            <ion-card-subtitle>Total: {{ userStats.total }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">Customers</span>
+                <span class="stat-value">{{ userStats.customers }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Sellers</span>
+                <span class="stat-value">{{ userStats.sellers }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Delivery</span>
+                <span class="stat-value">{{ userStats.delivery }}</span>
+              </div>
+            </div>
+            <ion-button expand="block" fill="clear" routerLink="/admin/users">
+              Manage Users
+              <ion-icon slot="end" name="arrow-forward"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card class="dashboard-card pending-card">
+          <ion-card-header>
+            <ion-icon name="time-outline"></ion-icon>
+            <ion-card-title>Pending Approvals</ion-card-title>
+            <ion-card-subtitle>Total: {{ pendingApprovals.length }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none" *ngIf="pendingApprovals.length > 0">
+              <ion-item *ngFor="let approval of pendingApprovals.slice(0, 3)">
+                <ion-label>
+                  <h3>{{ approval.name }}</h3>
+                  <p>{{ approval.role | titlecase }} • {{ approval.email }}</p>
+                </ion-label>
+                <ion-buttons slot="end">
+                  <ion-button color="success" (click)="approveUser(approval._id, approval.name)">
+                    <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button color="danger" (click)="rejectUser(approval._id, approval.name)">
+                    <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+            </ion-list>
+            <div class="empty-list" *ngIf="pendingApprovals.length === 0">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <p>No pending approvals</p>
+            </div>
+            <ion-button *ngIf="pendingApprovals.length > 3" expand="block" fill="clear" routerLink="/admin/approvals">
+              View All ({{ pendingApprovals.length }})
+              <ion-icon slot="end" name="arrow-forward"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ion-card class="dashboard-card">
+          <ion-card-header>
+            <ion-icon name="storefront"></ion-icon>
+            <ion-card-title>Sellers</ion-card-title>
+            <ion-card-subtitle>Total: {{ sellerStats.total }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">Active</span>
+                <span class="stat-value">{{ sellerStats.active }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Pending</span>
+                <span class="stat-value">{{ sellerStats.pending }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Inactive</span>
+                <span class="stat-value">{{ sellerStats.inactive }}</span>
+              </div>
+            </div>
+            <ion-button expand="block" fill="clear" routerLink="/admin/sellers">
+              Manage Sellers
+              <ion-icon slot="end" name="arrow-forward"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

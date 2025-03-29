@@ -1,0 +1,26 @@
+ion-segment {
+  --background: transparent;
+  --color: var(--ion-color-medium);
+  --color-checked: var(--ion-color-primary);
+  margin-bottom: 8px;
+  
+  ion-segment-button {
+    --border-radius: 20px;
+    --indicator-color: var(--ion-color-primary-light);
+    --indicator-height: 4px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    text-transform: none;
+    min-width: auto;
+    min-height: 40px;
+    font-size: 14px;
+    letter-spacing: 0;
+    
+    &::part(indicator) {
+      bottom: 0;
+      border-radius: 4px;
+    }
+  }
+}

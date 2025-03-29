@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Search</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar 
+    [(ngModel)]="searchTerm" 
+    (ionInput)="onSearch()" 
+    (ionClear)="clearSearch()"
+    placeholder="Search for dishes or restaurants"
+    animated>
+  </ion-searchbar>
+
+  <div class="search-content" *ngIf="searchTerm">
+    <div class="spinner-container" *ngIf="isSearching">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Searching...</p>
+    </div>
+
+    <div class="results-container" *ngIf="!isSearching">
+      <div class="no-results" *ngIf="searchResults.length === 0">
+        <ion-icon name="search-outline"></ion-icon>
+        <h4>No results found</h4>
+        <p>Try a different search term</p>
+      </div>
+
+      <ion-list *ngIf="searchResults.length > 0">
+        <ion-item *ngFor="let item of searchResults">
+          <ion-thumbnail slot="start">
+            <img src="assets/images/food-placeholder.jpg" alt="Food Image">
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ item.name }}</h2>
+            <h3>{{ item.restaurant }}</h3>
+            <p>
+              <ion-text color="primary">₹{{ item.price }}</ion-text>
+              <ion-text color="medium" class="rating">
+                <ion-icon name="star"></ion-icon> {{ item.rating }}
+              </ion-text>
+            </p>
+          </ion-label>
+          <ion-button slot="end" size="small">Add</ion-button>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+
+  <div class="empty-search" *ngIf="!searchTerm">
+    <ion-icon name="search"></ion-icon>
+    <h3>Search for your favorite dishes</h3>
+    <p>Enter dish name or restaurant to find what you're looking for</p>
+  </div>
+</ion-content> 
