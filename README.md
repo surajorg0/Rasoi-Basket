@@ -1,122 +1,119 @@
-# Rasoi Basket - Food Delivery Application
+# Rasoi Basket
 
-A full-stack food delivery application built with Angular and Node.js.
-
-## Features
-
-- Multi-role support (Admin, Seller, Delivery, User)
-- Admin dashboard for user management and approvals
-- Restaurant owner portal for menu management
-- Delivery partner interface
-- Customer ordering system
-- MongoDB integration for data persistence
-
-## Prerequisites
-
-Before running the application, make sure you have the following installed:
-
-- Node.js (v14.x or higher)
-- npm (v6.x or higher)
-- MongoDB (v4.x or higher)
-- Angular CLI (v15.x or higher)
-
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/rasoi-basket.git
-cd rasoi-basket
-```
-
-2. Install dependencies for both frontend and backend:
-
-```bash
-npm run install:all
-```
-
-3. Set up MongoDB:
-
-   - Make sure MongoDB is running on your machine
-   - The application will connect to the database at `mongodb://localhost:27017/rasoi_basket`
-   - If you need to change this, update the `.env` file in the `rasoi-basket-backend` directory
-
-## Running the Application
-
-### Development Mode
-
-To run both frontend and backend concurrently:
-
-```bash
-npm run dev
-```
-
-This will start:
-- Backend server on http://localhost:3000
-- Frontend server on http://localhost:4200
-
-### Running Separately
-
-To run the backend only:
-
-```bash
-npm run start:backend
-```
-
-To run the frontend only:
-
-```bash
-npm run start:frontend
-```
-
-## Demo Accounts
-
-The application includes demo accounts for testing different roles:
-
-| Role     | Email                 | Password |
-|----------|----------------------|----------|
-| Admin    | suraj@admin.com      | 12345    |
-| User     | suraj@user.com       | 12345    |
-| Seller   | suraj@seller.com     | 12345    |
-| Delivery | suraj@delivery.com   | 12345    |
-
-## API Endpoints
-
-### Authentication
-- `POST /api/users/login` - Login
-- `POST /api/users/register` - Register a new user
-
-### User Management
-- `GET /api/users/profile` - Get current user profile
-- `PUT /api/users/profile` - Update user profile
-- `GET /api/users` - Get all users (admin only)
-- `GET /api/users/pending` - Get pending approval users (admin only)
-- `PUT /api/users/:id/approve` - Approve a user (admin only)
-- `PUT /api/users/:id/reject` - Reject a user (admin only)
-- `DELETE /api/users/:id` - Delete a user (admin only)
-- `GET /api/users/:id` - Get user by ID (admin only)
-- `PUT /api/users/:id` - Update user (admin only)
+A food delivery application with multiple user roles (Admin, User, Seller, Delivery Partner).
 
 ## Project Structure
 
-```
-rasoi-basket/
-├── package.json           # Root package.json for running both services
-├── README.md              # This file
-├── rasoi-basket-frontend/ # Angular frontend
-└── rasoi-basket-backend/  # Node.js backend
-    ├── src/
-    │   ├── config/        # Database configuration
-    │   ├── controllers/   # Route controllers
-    │   ├── middlewares/   # Custom middlewares
-    │   ├── models/        # MongoDB models
-    │   ├── routes/        # API routes
-    │   ├── utils/         # Utility functions
-    │   └── server.js      # Entry point
-    ├── .env               # Environment variables
-    └── package.json       # Backend dependencies
+- **Frontend**: Angular (Ionic) application in `rasoi-basket-frontend` directory
+- **Backend**: Node.js (Express) application in `rasoi-basket-backend` directory
+
+## Prerequisites
+
+Before running the project, make sure you have the following installed:
+
+- Node.js (v14 or later)
+- npm (v6 or later)
+- MongoDB (v4 or later)
+- Angular CLI (`npm install -g @angular/cli`)
+- Ionic CLI (`npm install -g @ionic/cli`)
+
+## Step-by-Step Setup Guide
+
+### 1. Install Dependencies
+
+First, install all the required dependencies for both frontend and backend:
+
+```bash
+# Install root dependencies
+npm install
+
+# Install backend dependencies
+cd rasoi-basket-backend
+npm install
+
+# Install frontend dependencies
+cd ../rasoi-basket-frontend
+npm install
+
+# Return to the project root
+cd ..
 ```
 
-## License
+### 2. Set Up MongoDB
 
-This project is licensed under the ISC License. 
+Make sure MongoDB is running on your system:
+
+- **Windows**: MongoDB should be running as a service. You can check in Services (services.msc)
+- **macOS/Linux**: Run `sudo service mongod start` or `brew services start mongodb-community`
+
+The application will connect to:
+```
+mongodb://localhost:27017/rasoi_basket
+```
+
+### 3. Run the Backend Server
+
+```bash
+cd rasoi-basket-backend
+npm run dev
+```
+
+You should see the following output:
+```
+MongoDB Connected: localhost
+Server running on port 3000
+Environment: development
+MongoDB Status: Connected
+```
+
+Keep this terminal open and running.
+
+### 4. Run the Frontend Application
+
+Open a new terminal window/tab and run:
+
+```bash
+cd rasoi-basket-frontend
+npm start
+```
+
+This will start the Angular development server and open the application in your browser.
+
+### 5. Testing the Application
+
+You can use the following demo accounts to login:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | suraj@admin.com | 12345 |
+| User | suraj@user.com | 12345 |
+| Seller | suraj@seller.com | 12345 |
+| Delivery | suraj@delivery.com | 12345 |
+
+### 6. Registering New Users
+
+- Regular users are approved automatically
+- Seller and delivery partner accounts require admin approval
+- New users are stored in MongoDB and can login after registration
+
+## Troubleshooting
+
+### CORS Issues
+If you encounter CORS issues, make sure both frontend and backend servers are running and your backend has proper CORS configuration.
+
+### MongoDB Connection Issues
+- Verify MongoDB is running: `mongosh` in the terminal should connect to the MongoDB shell
+- Check connection string in `.env` file: `MONGODB_URI=mongodb://localhost:27017/rasoi_basket`
+
+### Login/Registration Issues
+- Verify the backend is running and responding to API requests
+- Check for any errors in browser console or backend terminal
+- Ensure MongoDB is properly connected
+
+## Development Notes
+
+- Frontend runs on: http://localhost:4200
+- Backend API runs on: http://localhost:3000
+- API endpoints are available at: http://localhost:3000/api/users, /api/products, /api/orders
+
+For more details on API endpoints, refer to the backend code or API documentation. 

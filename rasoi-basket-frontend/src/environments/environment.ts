@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  // Development API URLs (choose the appropriate one)
+  // apiUrl: 'http://10.0.2.2:3000/api', // For Android emulator testing
+  // apiUrl: 'http://localhost:3000/api', // For local browser testing
+  // Use a publicly accessible backend - replace with your actual deployed backend URL
+  apiUrl: 'https://rasoi-basket-api.onrender.com/api', // Public API for all users
   defaultMapZoom: 15
 };
 

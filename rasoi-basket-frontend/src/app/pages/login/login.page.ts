@@ -139,6 +139,8 @@ export class LoginPage implements OnInit {
 
     if (this.loginForm.valid) {
       this.isLoading = true;
+      
+      console.log('Attempting login with:', this.loginForm.value.email);
 
       this.authService.login(
         this.loginForm.value.email,
@@ -146,11 +148,18 @@ export class LoginPage implements OnInit {
       ).subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.navigateByRole();
+          console.log('Login successful, user data:', response);
+          console.log('Current user role:', this.authService.getUserRole());
+          
+          // Set a small timeout to ensure the current user is set before navigation
+          setTimeout(() => {
+            this.navigateByRole();
+          }, 100);
         },
         error: (error) => {
           this.isLoading = false;
           this.loginError = error.error?.message || 'Login failed. Please check your credentials.';
+          console.error('Login error:', error);
           
           // Show error alert
           this.presentAlert('Login Failed', this.loginError || 'Login failed. Please check your credentials.');
@@ -162,20 +171,34 @@ export class LoginPage implements OnInit {
   // Navigate to appropriate dashboard based on user role
   navigateByRole() {
     const userRole = this.authService.getUserRole();
+    console.log('Navigating based on role:', userRole);
     
+    if (!userRole) {
+      console.error('No user role found, cannot navigate. Logged in user:', this.authService.currentUserValue);
+      // Set a longer timeout to retry - sometimes token processing takes time
+      setTimeout(() => this.navigateByRole(), 500);
+      return;
+    }
+
     switch (userRole) {
       case 'admin':
+        console.log('Navigating to admin dashboard');
         this.router.navigate(['/admin-dashboard']);
         break;
       case 'seller':
+        console.log('Navigating to seller dashboard');
         this.router.navigate(['/seller-dashboard']);
         break;
       case 'delivery':
+        console.log('Navigating to delivery dashboard');
         this.router.navigate(['/delivery-dashboard']);
         break;
       case 'user':
-      default:
+        console.log('Navigating to user home');
         this.router.navigate(['/tabs/home']);
+        break;
+      default:
+        console.log('No role found, staying on login page');
         break;
     }
   }

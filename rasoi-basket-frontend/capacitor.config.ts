@@ -1,9 +1,19 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'rasoi-basket-frontend',
-  webDir: 'www'
+  appId: 'com.rasoibasket.app',
+  appName: 'Rasoi Basket',
+  webDir: 'www',
+  server: {
+    androidScheme: 'https',
+    cleartext: true, // Allow HTTP connections for development
+    allowNavigation: ['rasoi-basket-api.onrender.com', '*.mongodb.net']
+  },
+  plugins: {
+    CapacitorHttp: {
+      enabled: true
+    }
+  }
 };
 
 export default config;

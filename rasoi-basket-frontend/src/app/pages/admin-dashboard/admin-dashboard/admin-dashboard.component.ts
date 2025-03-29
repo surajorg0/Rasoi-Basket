@@ -304,4 +304,33 @@ export class AdminDashboardComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  manageUsers() {
+    this.presentToast('User management feature coming soon', 'primary');
+  }
+
+  viewAllApprovals() {
+    this.showPendingApprovalsAlert();
+  }
+
+  manageSellers() {
+    this.presentToast('Seller management feature coming soon', 'primary');
+  }
+
+  async showPendingApprovalsAlert() {
+    if (this.pendingApprovals.length === 0) {
+      this.presentToast('No pending approvals', 'medium');
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'All Pending Approvals',
+      message: this.pendingApprovals.map(user => 
+        `<p><strong>${user.name}</strong> (${user.role})<br>${user.email}</p>`
+      ).join('<hr>'),
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
 }

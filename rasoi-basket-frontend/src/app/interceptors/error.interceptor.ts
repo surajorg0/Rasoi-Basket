@@ -35,9 +35,20 @@ export class ErrorInterceptor implements HttpInterceptor {
             // Optionally, you could redirect to a "Server Unavailable" page
             // this.router.navigate(['/server-unavailable']);
           } else if (error.status === 401) {
-            // Auto logout if 401 Unauthorized is returned from API
-            this.authService.logout();
-            errorMessage = 'Your session has expired. Please log in again.';
+            // Check if this is a login attempt or a protected route
+            const isLoginAttempt = 
+              request.url.includes('/login') || 
+              request.url.includes('/direct-login') || 
+              request.url.includes('/login-test');
+            
+            if (!isLoginAttempt) {
+              // Only logout for 401s on protected routes, not during login attempts
+              this.authService.logout();
+              errorMessage = 'Your session has expired. Please log in again.';
+            } else {
+              // For login attempts, just pass along the error
+              errorMessage = error.error?.message || 'Invalid email or password';
+            }
           } else if (error.error && error.error.message) {
             errorMessage = error.error.message;
           } else {

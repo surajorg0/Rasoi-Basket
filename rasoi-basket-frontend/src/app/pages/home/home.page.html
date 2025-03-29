@@ -3,36 +3,104 @@
     <ion-title>
       Rasoi Basket
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/cart">
+        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+        <ion-badge *ngIf="cartItemCount > 0" color="danger">{{ cartItemCount }}</ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionChange)="searchProducts()"
+      placeholder="Search products..."
+    ></ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="selectedCategory" (ionChange)="segmentChanged()">
+      <ion-segment-button value="all">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="vegetables">
+        <ion-label>Vegetables</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="fruits">
+        <ion-label>Fruits</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="groceries">
+        <ion-label>Groceries</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="welcome-container">
-    <h1>Welcome to Rasoi Basket</h1>
-    <p>Your favorite food delivery platform</p>
-    
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Role-Based Authentication Demo</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>This demo shows different user roles:</p>
-        <ul>
-          <li><strong>Admin:</strong> Manage users, approve sellers/delivery partners</li>
-          <li><strong>Seller:</strong> Manage restaurant, menu items, orders</li>
-          <li><strong>Delivery Partner:</strong> Manage deliveries, update status</li>
-          <li><strong>Customer:</strong> Browse, order food, track deliveries</li>
-        </ul>
-        
-        <p *ngIf="!isLoggedIn">
-          <ion-button routerLink="/login" expand="block" color="primary">Log In</ion-button>
-          <ion-button routerLink="/register" expand="block" color="secondary">Create Account</ion-button>
-        </p>
-        
-        <p *ngIf="isLoggedIn">
-          You are logged in. Use the tabs to navigate.
-        </p>
-      </ion-card-content>
-    </ion-card>
+<ion-content>
+  <!-- Loading spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading products...</p>
   </div>
+
+  <!-- Error message -->
+  <div class="error-container" *ngIf="error">
+    <p>{{ error }}</p>
+    <ion-button (click)="loadProducts()">Retry</ion-button>
+  </div>
+
+  <!-- No products message -->
+  <div class="empty-container" *ngIf="!isLoading && !error && filteredProducts.length === 0">
+    <ion-icon name="leaf-outline"></ion-icon>
+    <h2>No products found</h2>
+    <p *ngIf="searchTerm">No products matching "{{ searchTerm }}"</p>
+    <p *ngIf="!searchTerm">No products available in this category</p>
+  </div>
+
+  <!-- Products grid -->
+  <div class="products-container" *ngIf="!isLoading && !error && filteredProducts.length > 0">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let product of filteredProducts">
+          <ion-card class="product-card" [routerLink]="['/product-details', product._id]">
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name">
+              <div class="discount-badge" *ngIf="product.discountPercentage > 0">
+                -{{ product.discountPercentage }}%
+              </div>
+            </div>
+            <ion-card-header>
+              <ion-card-subtitle>{{ product.category | titlecase }}</ion-card-subtitle>
+              <ion-card-title>{{ product.name }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="price-container">
+                <span class="final-price">₹{{ product.finalPrice }}</span>
+                <span class="original-price" *ngIf="product.discountPercentage > 0">₹{{ product.price }}</span>
+              </div>
+              <div class="product-footer">
+                <span class="unit">{{ product.unit }}</span>
+                <ion-button 
+                  fill="clear" 
+                  size="small" 
+                  (click)="addToCart($event, product)"
+                  [disabled]="!product.isAvailable || product.inStock <= 0">
+                  <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+                </ion-button>
+              </div>
+              <div class="stock-status" *ngIf="!product.isAvailable || product.inStock <= 0">
+                Out of Stock
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  
+  <!-- Login prompt for non-authenticated users -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isLoggedIn">
+    <ion-fab-button routerLink="/login">
+      <ion-icon name="log-in-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content> 

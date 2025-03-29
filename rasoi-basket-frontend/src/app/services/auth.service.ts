@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, from, map, tap, catchError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, from, map, tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -43,7 +43,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private jwtHelper = new JwtHelperService();
-  private useMockData = true; // Set to false to connect to real backend
+  private useMockData = false; // Set to false to connect to real backend
 
   // Mock user data
   private mockUsers: User[] = [
@@ -205,17 +205,60 @@ export class AuthService {
       }
     }
     
-    // Use real API if not using mock data
-    return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password })
+    // Create HTTP headers
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const userData = { email, password };
+    
+    // Try login-test endpoint first (most reliable)
+    return this.http.post<any>(`${environment.apiUrl}/users/login-test`, userData, { headers })
       .pipe(
         tap(response => {
-          // Store user and token in local storage
+          console.log('Login successful with login-test endpoint:', response);
           this.storeUserData(response);
           this.currentUserSubject.next(response);
         }),
         catchError(error => {
-          console.error('Login error:', error);
-          throw error;
+          console.error('Login-test error:', error);
+          
+          // If login-test fails, try the direct-login endpoint
+          console.log('Trying direct-login endpoint...');
+          return this.http.post<any>(`${environment.apiUrl}/direct-login`, userData, { headers })
+            .pipe(
+              tap(response => {
+                console.log('Direct login successful:', response);
+                this.storeUserData(response);
+                this.currentUserSubject.next(response);
+              }),
+              catchError(directLoginError => {
+                console.error('Direct login error:', directLoginError);
+                
+                // Finally, try the regular login endpoint
+                console.log('Trying regular login endpoint...');
+                return this.http.post<any>(`${environment.apiUrl}/users/login`, userData, { headers })
+                  .pipe(
+                    tap(response => {
+                      console.log('Regular login successful:', response);
+                      this.storeUserData(response);
+                      this.currentUserSubject.next(response);
+                    }),
+                    catchError(regularLoginError => {
+                      console.error('All login attempts failed:', regularLoginError);
+                      
+                      // If all login attempts fail and we have a "stream is not readable" error,
+                      // provide a more helpful error message
+                      if (regularLoginError.error && regularLoginError.error.message === 'stream is not readable') {
+                        return throwError(() => ({ 
+                          error: { 
+                            message: 'Server communication error. Please try again or contact support.' 
+                          } 
+                        }));
+                      }
+                      
+                      return throwError(() => regularLoginError);
+                    })
+                  );
+              })
+            );
         })
       );
   }

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: rasoi-basket-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://surajorg44:EydGYuOhwn1SY7Gq@cluster0.tnzmi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: JWT_SECRET
+        value: rasoi-basket-secret-key
+      - key: PORT
+        value: 3000 

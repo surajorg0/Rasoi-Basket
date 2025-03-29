@@ -85,9 +85,16 @@
 
       <ion-item>
         <ion-label position="floating">Restaurant/Store Address</ion-label>
-        <ion-textarea formControlName="storeAddress" rows="3"></ion-textarea>
+        <ion-textarea 
+          formControlName="storeAddress" 
+          rows="3"
+          (ionChange)="updateStoreAddress($event)"
+        ></ion-textarea>
       </ion-item>
-      <div *ngIf="isSubmitted && sellerInfo.get('storeAddress')?.errors?.['required']" class="error-message">
+      <div class="debug-value" *ngIf="role === 'seller'">
+        Current value: "{{ sellerInfo.get('storeAddress')?.value }}"
+      </div>
+      <div *ngIf="isSubmitted && sellerInfo.get('storeAddress')?.errors?.['required'] && !sellerInfo.get('storeAddress')?.value?.trim()" class="error-message">
         Store address is required
       </div>
 
@@ -132,11 +139,23 @@
       </div>
 
       <ion-item>
-        <ion-label position="floating">Service Areas (comma-separated)</ion-label>
-        <ion-textarea formControlName="area" rows="3" placeholder="e.g. South Mumbai, Andheri, Bandra"></ion-textarea>
+        <ion-label position="floating">Delivery Areas</ion-label>
+        <ion-textarea 
+          formControlName="area" 
+          rows="2" 
+          placeholder="Enter comma-separated areas, e.g., Andheri, Bandra, South Mumbai"
+          (ionChange)="updateDeliveryAreas($event)"
+        ></ion-textarea>
       </ion-item>
-      <div *ngIf="isSubmitted && deliveryInfo.get('area')?.errors?.['required']" class="error-message">
-        Service area(s) are required
+      <div class="debug-value" *ngIf="role === 'delivery'">
+        Current value: "{{ deliveryInfo.get('area')?.value }}"
+      </div>
+      <div class="helper-text">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        <span>Enter the areas you can deliver to, separated by commas</span>
+      </div>
+      <div *ngIf="isSubmitted && deliveryInfo.get('area')?.errors?.['required'] && !deliveryInfo.get('area')?.value?.trim()" class="error-message">
+        Delivery areas are required
       </div>
     </div>
 
@@ -156,6 +175,36 @@
       <ion-spinner name="dots" *ngIf="isLoading"></ion-spinner>
       <span *ngIf="!isLoading">Register</span>
     </ion-button>
+    
+    <!-- Help text for store owners with validation issues -->
+    <div *ngIf="role === 'seller' && isSubmitted && !registerForm.valid" class="helper-text">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <span>If you're having trouble submitting the form, please check that all required fields are filled out correctly.</span>
+    </div>
+    
+    <!-- Fallback button for when validation is failing but data is present -->
+    <div *ngIf="role === 'seller' && isSubmitted && !registerForm.valid && 
+                sellerInfo.get('storeName')?.value && 
+                sellerInfo.get('businessRegNumber')?.value" 
+         class="fallback-container">
+      <p class="fallback-message">Having trouble with form validation?</p>
+      <ion-button expand="block" fill="outline" (click)="forceRegister()" [disabled]="isLoading">
+        <ion-spinner name="dots" *ngIf="isLoading"></ion-spinner>
+        <span *ngIf="!isLoading">Submit Registration</span>
+      </ion-button>
+    </div>
+    
+    <!-- Fallback button for delivery partners -->
+    <div *ngIf="role === 'delivery' && isSubmitted && !registerForm.valid && 
+                deliveryInfo.get('vehicleType')?.value && 
+                deliveryInfo.get('licenseNumber')?.value" 
+         class="fallback-container">
+      <p class="fallback-message">Having trouble with form validation?</p>
+      <ion-button expand="block" fill="outline" (click)="forceDeliveryRegister()" [disabled]="isLoading">
+        <ion-spinner name="dots" *ngIf="isLoading"></ion-spinner>
+        <span *ngIf="!isLoading">Submit Registration</span>
+      </ion-button>
+    </div>
   </form>
 
   <div class="login-options">

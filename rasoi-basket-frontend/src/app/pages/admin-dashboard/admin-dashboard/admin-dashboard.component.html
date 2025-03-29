@@ -54,7 +54,7 @@
                 <span class="stat-value">{{ userStats.delivery }}</span>
               </div>
             </div>
-            <ion-button expand="block" fill="clear" routerLink="/admin/users">
+            <ion-button expand="block" fill="clear" (click)="manageUsers()">
               Manage Users
               <ion-icon slot="end" name="arrow-forward"></ion-icon>
             </ion-button>
@@ -90,7 +90,7 @@
               <ion-icon name="checkmark-circle-outline"></ion-icon>
               <p>No pending approvals</p>
             </div>
-            <ion-button *ngIf="pendingApprovals.length > 3" expand="block" fill="clear" routerLink="/admin/approvals">
+            <ion-button *ngIf="pendingApprovals.length > 3" expand="block" fill="clear" (click)="viewAllApprovals()">
               View All ({{ pendingApprovals.length }})
               <ion-icon slot="end" name="arrow-forward"></ion-icon>
             </ion-button>
@@ -120,7 +120,7 @@
                 <span class="stat-value">{{ sellerStats.inactive }}</span>
               </div>
             </div>
-            <ion-button expand="block" fill="clear" routerLink="/admin/sellers">
+            <ion-button expand="block" fill="clear" (click)="manageSellers()">
               Manage Sellers
               <ion-icon slot="end" name="arrow-forward"></ion-icon>
             </ion-button>

@@ -9,7 +9,7 @@ import { MockDataService } from './mock-data.service';
 })
 export class ProductService {
   private apiUrl = `${environment.apiUrl}/products`;
-  private useMockData = true; // Set to false when connecting to real backend
+  private useMockData = false; // Set to false to use real MongoDB backend
 
   constructor(
     private http: HttpClient,
@@ -48,25 +48,21 @@ export class ProductService {
 
   // Create a new product (for sellers)
   createProduct(productData: any): Observable<any> {
-    // Always use real API for data modification
     return this.http.post<any>(this.apiUrl, productData);
   }
 
   // Update an existing product (for sellers)
   updateProduct(id: string, productData: any): Observable<any> {
-    // Always use real API for data modification
     return this.http.put<any>(`${this.apiUrl}/${id}`, productData);
   }
 
   // Delete a product (for sellers)
   deleteProduct(id: string): Observable<any> {
-    // Always use real API for data modification
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 
   // Get all products for a seller
   getSellerProducts(): Observable<any[]> {
-    // Always use real API for seller operations
     return this.http.get<any[]>(`${this.apiUrl}/seller/products`);
   }
 } 
